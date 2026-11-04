@@ -1,0 +1,27 @@
+services:
+  tresorry:
+    build: .
+    image: tresorry:latest
+    container_name: tresorry
+    user: "${TRESORRY_UID:-1000}:${TRESORRY_GID:-1000}"
+    restart: unless-stopped
+    ports:
+      - "0.0.0.0:${TRESORRY_PORT:-443}:8443"
+    environment:
+      SHARE_ROOT: /data
+      PASSWORD_HASH_FILE: /secrets/password_hash
+      MAX_UPLOAD_GB: "20"
+      SESSION_HOURS: "3"
+      VISIBLE_DAYS: "28"
+      CERT_SANS: ${CERT_SANS:-localhost,127.0.0.1}
+    volumes:
+      - "${SHARE_DIR:-./data}:/data"
+      - ./secrets:/secrets:ro
+      - ./certs:/certs
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 256

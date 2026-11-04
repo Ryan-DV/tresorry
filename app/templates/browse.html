@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="csrf" content="{{ csrf }}">
+<title>{{ folder }} · Tresorry</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23f2b84b'/%3E%3Ccircle cx='16' cy='16' r='8' fill='none' stroke='%230a0b0e' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%230a0b0e'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+<script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body data-upload="{{ url_for('upload', sub=rel) }}" data-mkdir="{{ url_for('mkdir', sub=rel) }}" data-rel="{{ rel }}">
+<a class="skip" href="#list">Skip to files</a>
+
+<svg width="0" height="0" class="sprite" aria-hidden="true">
+  <defs>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2.5h7.5A2.5 2.5 0 0 1 21 10v7.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="m21 16-5-5-9 9"/></symbol>
+    <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="5" width="13" height="14" rx="2.5"/><path d="m16 10 5-3v10l-5-3"/></symbol>
+    <symbol id="i-audio" viewBox="0 0 24 24"><path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></symbol>
+    <symbol id="i-archive" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9M10 13h4"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></symbol>
+    <symbol id="i-binary" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9v6M15 9v6M12 9h0M12 15h0"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 20V9M7 14l5-5 5 5M5 4h14"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="m10 7 5 5-5 5"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-term" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="m7 9 3 3-3 3M13 15h4"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <a class="brand" href="{{ url_for('browse', sub='') }}" aria-label="Tresorry home">
+    <svg class="mark" viewBox="0 0 52 52" aria-hidden="true"><rect x="1" y="1" width="50" height="50" rx="14" fill="#15171d" stroke="rgba(255,255,255,0.1)"/><g fill="none" stroke="#f2b84b" stroke-width="2.6" stroke-linecap="round"><circle cx="26" cy="26" r="13"/><path d="M26 9v4M26 39v4M9 26h4M39 26h4"/></g><circle cx="26" cy="26" r="4" fill="#f2b84b"/></svg>
+    <span>tre<em>sorry</em></span>
+  </a>
+  <nav class="crumbs" aria-label="Folder path">
+    <a href="{{ url_for('browse', sub='') }}" class="crumb{% if not crumbs %} cur{% endif %}"><svg><use href="#i-home"/></svg><span>Home</span></a>
+    {% for c in crumbs %}
+      <svg class="sep"><use href="#i-chev"/></svg>
+      <a href="{{ url_for('browse', sub=c.rel) }}" class="crumb{% if loop.last %} cur{% endif %}">{{ c.name }}</a>
+    {% endfor %}
+  </nav>
+  {% if not basic %}
+  <form method="post" action="{{ url_for('logout') }}" class="logout">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <button class="btn ghost sm" type="submit" title="Lock"><svg><use href="#i-lock"/></svg><span>Lock</span></button>
+  </form>
+  {% endif %}
+</header>
+
+<main>
+  <section class="head">
+    <div>
+      <p class="over">Shared folder</p>
+      <h1>{{ folder }}</h1>
+      <p class="meta" id="meta">{{ entries|length }} item{{ '' if entries|length == 1 else 's' }} · {{ total|human }}</p>
+    </div>
+    <div class="actions">
+      <label class="search">
+        <svg><use href="#i-search"/></svg>
+        <input id="filter" type="search" placeholder="Filter this folder" autocomplete="off" spellcheck="false">
+        <kbd>/</kbd>
+      </label>
+      <button class="btn ghost" id="newFolder" type="button"><svg><use href="#i-plus"/></svg><span>Folder</span></button>
+      <label class="btn primary" for="picker"><svg><use href="#i-upload"/></svg><span>Upload</span></label>
+      <input id="picker" type="file" multiple hidden>
+    </div>
+  </section>
+
+  <label class="drop" for="picker" id="drop">
+    <span class="drop-ico"><svg><use href="#i-upload"/></svg></span>
+    <span><strong>Drop files anywhere</strong> to upload into <code>/{{ rel }}</code><small>or click to pick. Max 20 GB per request.{% if visible_days %} Files leave this panel {{ visible_days }} days after upload.{% endif %}</small></span>
+  </label>
+
+  <div class="list" id="list" role="table" aria-label="Files">
+    <div class="row hdr" role="row">
+      <button class="col name" data-sort="name" role="columnheader">Name</button>
+      <button class="col size" data-sort="size" role="columnheader">Size</button>
+      <button class="col date" data-sort="mtime" role="columnheader">Modified</button>
+      <span class="col act" role="columnheader"><span class="vh">Actions</span></span>
+    </div>
+    <div id="rows">
+    {% for e in entries %}
+      <div class="row k-{{ e.kind }}" role="row" data-name="{{ e.name|lower }}" data-size="{{ e.size }}" data-mtime="{{ e.mtime }}" data-dir="{{ 1 if e.is_dir else 0 }}">
+        {% if e.is_dir %}
+          <a class="col name" role="cell" href="{{ url_for('browse', sub=e.rel) }}"><span class="ico"><svg><use href="#i-folder"/></svg></span><span class="fn">{{ e.name }}</span></a>
+        {% elif e.viewable %}
+          <a class="col name" role="cell" href="{{ url_for('view', sub=e.rel) }}" target="_blank" rel="noopener"><span class="ico"><svg><use href="#i-{{ e.kind }}"/></svg></span><span class="fn">{{ e.name }}</span>{% if e.days_left is not none and e.days_left < 3 %}<span class="exp" title="Leaves this panel soon">{{ [e.days_left|round(0, 'ceil')|int, 1]|max }}d left</span>{% endif %}</a>
+        {% else %}
+          <a class="col name" role="cell" href="{{ url_for('download', sub=e.rel) }}"><span class="ico"><svg><use href="#i-{{ e.kind }}"/></svg></span><span class="fn">{{ e.name }}</span>{% if e.days_left is not none and e.days_left < 3 %}<span class="exp" title="Leaves this panel soon">{{ [e.days_left|round(0, 'ceil')|int, 1]|max }}d left</span>{% endif %}</a>
+        {% endif %}
+        <span class="col size" role="cell">{{ '' if e.is_dir else e.size|human }}</span>
+        <span class="col date" role="cell">{{ e.date }}</span>
+        <span class="col act" role="cell">
+          {% if not e.is_dir %}
+            {% if e.viewable %}<a class="iconbtn" href="{{ url_for('view', sub=e.rel) }}" target="_blank" rel="noopener" title="Preview"><svg><use href="#i-eye"/></svg></a>{% endif %}
+            <a class="iconbtn" href="{{ url_for('download', sub=e.rel) }}" title="Download"><svg><use href="#i-download"/></svg></a>
+            <button class="iconbtn copy" type="button" data-path="{{ url_for('download', sub=e.rel) }}" title="Copy curl command"><svg><use href="#i-term"/></svg></button>
+          {% endif %}
+        </span>
+      </div>
+    {% endfor %}
+    </div>
+    <div class="none" id="none"{% if entries %} hidden{% endif %}>
+      <div class="none-art" aria-hidden="true"><svg><use href="#i-folder"/></svg></div>
+      <p><strong>{{ 'Nothing matches' if entries else 'This folder is empty' }}</strong></p>
+      <p class="muted">{{ '' if entries else 'Drop something in. It will not judge you.' }}</p>
+    </div>
+  </div>
+
+  <details class="cli">
+    <summary><svg><use href="#i-term"/></svg> Command line access</summary>
+    <p class="muted">HTTP Basic auth works with any username and the passphrase. Use <code>-k</code> because the certificate is self-signed.</p>
+    <pre><code><span class="c"># list this folder</span>
+curl -k -u :'PASSPHRASE' https://{{ host }}/browse/{{ rel }}
+
+<span class="c"># download</span>
+curl -k -u :'PASSPHRASE' -OJ https://{{ host }}/dl/{{ rel ~ '/' if rel }}FILE
+
+<span class="c"># upload into this folder</span>
+curl -k -u :'PASSPHRASE' -F file=@./loot.zip https://{{ host }}/upload/{{ rel }}
+
+<span class="c"># wget / PowerShell</span>
+wget --no-check-certificate --auth-no-challenge --user=x --password='PASSPHRASE' https://{{ host }}/dl/{{ rel ~ '/' if rel }}FILE
+iwr -SkipCertificateCheck -Credential (Get-Credential x) https://{{ host }}/dl/{{ rel ~ '/' if rel }}FILE -OutFile FILE</code></pre>
+  </details>
+</main>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="overlay-box">
+    <span class="drop-ico big"><svg><use href="#i-upload"/></svg></span>
+    <strong>Let go to upload</strong>
+    <span>into /{{ rel }}</span>
+  </div>
+</div>
+
+<aside class="uploads" id="uploads" hidden aria-live="polite">
+  <div class="up-head"><strong id="upTitle">Uploading</strong><button class="iconbtn" id="upClose" type="button" title="Hide"><svg><use href="#i-x"/></svg></button></div>
+  <ul id="upList"></ul>
+</aside>
+
+<dialog id="mk">
+  <form method="dialog" id="mkForm">
+    <h2>New folder</h2>
+    <p class="muted">Created inside <code>/{{ rel }}</code></p>
+    <input id="mkName" type="text" maxlength="200" placeholder="Folder name" autocomplete="off" spellcheck="false" required>
+    <p class="mk-err" id="mkErr" hidden></p>
+    <div class="dlg-act">
+      <button class="btn ghost" id="mkCancel" type="button">Cancel</button>
+      <button class="btn primary" id="mkGo" value="ok" type="submit">Create</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

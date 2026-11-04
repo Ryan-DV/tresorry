@@ -1,0 +1,14 @@
+bind = "0.0.0.0:8443"
+workers = 1            # login throttle lives in memory, keep it to one process
+threads = 32
+worker_class = "gthread"
+timeout = 3600         # long uploads
+graceful_timeout = 10
+keepalive = 5
+certfile = "/certs/cert.pem"
+keyfile = "/certs/key.pem"
+worker_tmp_dir = "/dev/shm"
+accesslog = "-"
+errorlog = "-"
+access_log_format = '%(h)s "%(r)s" %(s)s %(B)s'
+forwarded_allow_ips = ""

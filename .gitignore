@@ -1,0 +1,13 @@
+# secrets and machine-specific config: never commit
+secrets/
+certs/
+.env
+data/
+*.pem
+*.key
+password_hash*
+# local junk
+.DS_Store
+__pycache__/
+*.pyc
+*.tar.gz

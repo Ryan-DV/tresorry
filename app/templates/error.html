@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ code }} · Tresorry</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body class="center">
+  <div class="empty">
+    <div class="big">{{ code }}</div>
+    <p>{{ msg }}</p>
+    <a class="btn primary" href="{{ url_for('browse', sub='') }}">Back to the vault</a>
+  </div>
+</body>
+</html>
